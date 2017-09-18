@@ -1,5 +1,4 @@
 import Unit from './unit';
-import gameRoomSocket from './game-room-socket';
 
 class Enemy {
 
@@ -7,17 +6,22 @@ class Enemy {
 		return this._id;
 	}
 
-	constructor(id, map, position) {
+	get unit() {
+		return this._unit;
+	}
+
+	constructor(id, map, position, gameRoomSocket) {
 		this._id = id;
 		this._map = map;
-		this._unit = new Unit(position, map, 100, false);
+		this._unit = new Unit(position);
+		this._gameRoomSocket = gameRoomSocket;
 
-		gameRoomSocket.onUnitStateUpdated((data) => this.updateUnit(data));
+		this._gameRoomSocket.onUnitStateUpdated((data) => this.updateUnit(data));
 	}
 
 	updateUnit(data) {
-		if (data.id == this._id) {
-			let target = this._map.getCell(data.x, data.y);
+		if (data.sid == this._id) {
+			let target = this._map.getCell(data.position.x, data.position.y);
 			this._unit.path = [target];
 		}
 	}

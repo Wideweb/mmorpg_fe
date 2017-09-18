@@ -11,6 +11,10 @@ class IOCContainer {
 			name: name,
 			as: function (value) {
 				this.value = value;
+			},
+			asSingleton: function (value) {
+				this.value = value;
+				this.singleton = true;
 			}
 		};
 		this.records.push(record);
@@ -23,6 +27,20 @@ class IOCContainer {
 			return null;
 		}
 
+		if (record.singleton && record.instance) {
+			return record.instance;
+		}
+
+		let instance = this.createInstance(record);
+
+		if (record.singleton) {
+			return record.instance = instance;
+		}
+
+		return instance;
+	}
+
+	createInstance(record) {
 		if (Utils.isFunction(record.value)) {
 			var deps = record.value.$inject;
 			if (Utils.isArray(deps)) {
@@ -31,9 +49,11 @@ class IOCContainer {
 			}
 			return new record.value();
 		}
-		
+
 		return record.value;
 	}
 }
 
-export default IOCContainer;
+const container = new IOCContainer();
+
+export default container;

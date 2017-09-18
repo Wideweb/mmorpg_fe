@@ -3,17 +3,27 @@ import Observable from './observable';
 
 class WebSocketClient extends Observable {
 
-	constructor(url) {
+	constructor(url, accessToken) {
 		super();
 
+		this._accessToken = accessToken;
 		this._socket = new WebSocket(url);
 		this._socket.onmessage = (e) => this.onmessage(e);
+
+		this._waitPromise = new Promise((resolve) => {
+			this._socket.onopen = () => resolve();
+		});
+	}
+
+	async waitForConnection() {
+		return this._waitPromise;
 	}
 
 	send(event, data) {
 		let message = {
 			event: event,
-			data: JSON.stringify(data)
+			data: JSON.stringify(data),
+			token: this._accessToken
 		};
 
 		if (this._socket.readyState == WebSocket.OPEN) {

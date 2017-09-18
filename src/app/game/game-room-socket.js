@@ -3,16 +3,28 @@ import webSocketEvents from './constants/web-socket-events';
 
 class GameRoomSocket extends WebSocket {
 
-	constructor() {
-		super('ws://localhost:55603/gr');
+	constructor(url, accessToken) {
+		super(url, accessToken);
+	}
+
+	joinRoom(room) {
+		this.send(webSocketEvents.joinRoom, { room: room });
 	}
 
 	sendUnitState(data) {
 		this.send(webSocketEvents.unitState, data);
 	}
 
+	sendSetTarget(data) {
+		this.send(webSocketEvents.setTarget, data);
+	}
+
 	onUnitStateUpdated(callback) {
 		this.subscribe(webSocketEvents.unitState, callback);
+	}
+
+	onUnitFired(callback) {
+		this.subscribe(webSocketEvents.unitFired, callback);
 	}
 
 	onUserConnected(callback) {
@@ -28,6 +40,4 @@ class GameRoomSocket extends WebSocket {
 	}
 }
 
-let gameRoomSocket = new GameRoomSocket();
-
-export default gameRoomSocket;
+export default GameRoomSocket;
