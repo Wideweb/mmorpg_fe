@@ -3,10 +3,11 @@ const webSocketEvents = {
 	userConnected: 'USER_CONNECTED',
     userData: 'USER_DATA',
     userDisconnected: 'USER_DISCONNECTED',
-    unitState: 'UNIT_STATE',
+    gameObjectState: 'GAME_OBJECT_STATE',
 	joinRoom: 'JOIN_ROOM',
 	setTarget: 'SET_TARGET',
-	unitFired: 'UNIT_FIRED'
+	UseAbility: 'USE_ABILITY',
+	DealDamage: 'DEAL_DAMAGE'
 };
 
 export default webSocketEvents;

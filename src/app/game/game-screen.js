@@ -1,7 +1,8 @@
 import Player from './player';
-import Enemy from './enemy';
 import Bullet from './bullet';
 import CameraController from './camera-controller';
+import registry from './game-object-registry';
+import factory from './game-object-factory';
 
 class GameScreen {
 
@@ -14,93 +15,92 @@ class GameScreen {
 		this._gameRoomSocket.onUserData(data => this.onUserData(data));
 		this._gameRoomSocket.onUserConnected(data => this.onUserConnected(data));
 		this._gameRoomSocket.onUserDisconnected(data => this.onUserDisconnected(data));
-		this._gameRoomSocket.onUnitFired((data) => this.onUnitFired(data));
+		this._gameRoomSocket.onUnitUsedAbility((data) => this.onUnitUsedAbility(data));
+		this._gameRoomSocket.onGameObjectStateUpdated((data) => this.onGameObjectStateUpdated(data));
+		this._gameRoomSocket.onDamageDealt((data) => this.onDamageDealt(data));
 
 		this._player = null;
-		this._enemies = [];
 		this._gameObjects = [];
 
 		this._cameraController = new CameraController(this._camera);
 	}
 
+	onGameObjectStateUpdated(data) {
+		let gameObject = registry.getById(data.gameObject.sid);
+
+		if (!gameObject) {
+			return;
+		}
+
+		let position = data.gameObject.position;
+		let target = this._map.getCell(position.x, position.y);
+		gameObject.path = [target];
+	}
+
 	onUserData(data) {
+		for (let gameObjectData of data.gameObjects) {
+			registry.add(factory.create(gameObjectData));
+		}
+
 		let player = data.player;
-		let position = player.unit.position;
+		let playerGameObject = registry.getById(player.unit.sid);
 
 		this._player = new Player(
 			player.sid,
-			this._map,
 			this._camera,
-			position,
+			playerGameObject,
 			this._gameRoomSocket
 		);
-
-		for (let enemy of data.units) {
-			this._enemies.push(new Enemy(enemy.sid, this._map, enemy.position, this._gameRoomSocket));
-		}
 	}
 
 	onUserConnected(data) {
 		let player = data.player;
-		let position = player.unit.position;
 
 		if (this._player && player.sid != this._player.id) {
-			this._enemies.push(new Enemy(player.sid, this._map, position, this._gameRoomSocket));
+			let playerGameObject = factory.create(player.unit);
+			registry.add(playerGameObject);
 		}
 	}
 
 	onUserDisconnected(data) {
-		let enemyIndex = this._enemies.findIndex(it => it.id == data.sid);
-		if (enemyIndex >= 0) {
-			this._enemies.splice(enemyIndex, 1);
-		}
+		registry.remove(data.sid);
 	}
 
-	onUnitFired(data) {
-		let origin = this.getUnitBySid(data.sid);
-		let target = this.getUnitBySid(data.targetSid);
+	onUnitUsedAbility(data) {
+		let origin = registry.getById(data.sid);
+		let target = registry.getById(data.targetSid);
 
 		if (!origin || !target) {
 			return;
 		}
 
-		this._gameObjects.push(new Bullet(origin.screenPositionCenter, target));
+		registry.add(new Bullet(data.bulletSid, origin.screenPositionCenter, 3, target));
 	}
 
-	getUnitBySid(sid) {
-		let unit = null;
-		if (sid == this._player.id) {
-			unit = this._player.unit;
-		} else {
-			let enemy = this._enemies.find(e => e.id == sid);
-			if (enemy) {
-				unit = enemy.unit;
-			}
+	onDamageDealt(data) {
+		let target = registry.getById(data.targetSid);
+
+		if (!target) {
+			return;
 		}
 
-		return unit;
+		target.takeDamage(data.damage);
 	}
 
 	update(elapsed) {
-		this._player && this._player.update(elapsed);
-		for (let enemy of this._enemies) {
-			enemy.update(elapsed);
-		}
-		for (let gameObject of this._gameObjects) {
+		for (let gameObject of registry.getAll()) {
 			gameObject.update(elapsed);
 		}
+
 		this._cameraController.update(elapsed);
 	}
 
 	draw(context) {
 		this._map.draw(context);
-		for (let enemy of this._enemies) {
-			enemy.draw(context);
-		}
-		for (let gameObject of this._gameObjects) {
+
+		for (let gameObject of registry.getAll()) {
 			gameObject.draw(context);
 		}
-		this._player && this._player.draw(context);
 	}
 }
 

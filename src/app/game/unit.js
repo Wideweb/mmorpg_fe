@@ -1,20 +1,15 @@
 import constants from './constants';
+import GameObject from './game-object';
 
-class Unit {
+class Unit extends GameObject {
 
-	constructor(position) {
+	constructor(sid, screenPosition, width, position) {
+		super(sid, screenPosition, width);
+
 		this._path = [];
 		this._position = position;
 
-		this._width = 20;
-		this._height = 20;
-
 		this._speed = 1;
-
-		this._screenPosition = {
-			x: this._position.x * this._width,
-			y: this._position.y * this._height,
-		};
 	}
 
 	update(elapsed) {
@@ -25,7 +20,7 @@ class Unit {
 		context.save();
 
 		context.beginPath();
-		context.rect(this._screenPosition.x, this._screenPosition.y, this._width, this._height);
+		context.rect(this._screenPosition.x, this._screenPosition.y, this._width, this._width);
 		context.fillStyle = 'red';
 		context.fill();
 
@@ -80,7 +75,11 @@ class Unit {
 		return this._screenPosition.x <= screenPosition.x
 			&& this._screenPosition.x + this._width >= screenPosition.x
 			&& this._screenPosition.y <= screenPosition.y
-			&& this._screenPosition.y + this._height >= screenPosition.y;
+			&& this._screenPosition.y + this._width >= screenPosition.y;
+	}
+
+	takeDamage(damage) {
+		console.log('took damage ', damage);
 	}
 
 	set path(value) {
@@ -97,22 +96,8 @@ class Unit {
 
 		this._screenPosition = {
 			x: this._position.x * this._width,
-			y: this._position.y * this._height,
+			y: this._position.y * this._width,
 		};
-	}
-
-	get screenPosition() {
-		return this._screenPosition;
-	}
-
-	set screenPosition(value) {
-		this._screenPosition = value;
-		this._position.x = Math.floor(this._screenPosition.x / this._width);
-		this._position.y = Math.floor(this._screenPosition.y / this._width);
-	}
-
-	get screenPositionCenter() {
-		return { x: this._screenPosition.x + this._width / 2, y: this._screenPosition.y + this._width / 2 };
 	}
 }
 

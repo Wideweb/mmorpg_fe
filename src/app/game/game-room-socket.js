@@ -11,20 +11,24 @@ class GameRoomSocket extends WebSocket {
 		this.send(webSocketEvents.joinRoom, { room: room });
 	}
 
-	sendUnitState(data) {
-		this.send(webSocketEvents.unitState, data);
-	}
-
 	sendSetTarget(data) {
 		this.send(webSocketEvents.setTarget, data);
 	}
 
-	onUnitStateUpdated(callback) {
-		this.subscribe(webSocketEvents.unitState, callback);
+	sendUseAbility(data) {
+		this.subscribe(webSocketEvents.UseAbility, data);
 	}
 
-	onUnitFired(callback) {
-		this.subscribe(webSocketEvents.unitFired, callback);
+	onGameObjectStateUpdated(callback) {
+		this.subscribe(webSocketEvents.gameObjectState, callback);
+	}
+	
+	onUnitUsedAbility(callback) {
+		this.subscribe(webSocketEvents.UseAbility, callback);
+	}
+	
+	onDamageDealt(callback) {
+		this.subscribe(webSocketEvents.DealDamage, callback);
 	}
 
 	onUserConnected(callback) {
