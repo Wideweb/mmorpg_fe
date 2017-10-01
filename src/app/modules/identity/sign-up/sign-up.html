@@ -1,0 +1,42 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+			<h2>Log in</h2>
+			<div class="row">
+				<span class="error-message">{{ $ctrl.errorMessage }}</span>
+			</div>
+			<div class="row">
+				<form 
+					name="form" 
+					class="form-horizontal" 
+					novalidate 
+					role="form"
+					ng-submit="$ctrl.signUp(form)">
+
+					<input 
+						name="userName"
+						class="form-control"
+						type="text"
+						ng-model="$ctrl.userName"
+						required />
+
+					<input 
+						name="password"
+						class="form-control"
+						type="password"
+						ng-model="$ctrl.password"
+						required />
+
+					<input 
+						name="repeatPassword"
+						class="form-control"
+						type="password"
+						ng-model="$ctrl.repeatPassword"
+						required />
+
+					<button type="submit" class="btn btn-primary" ng-disabled="$ctrl.submitting">Ok</button>
+				</form>
+			</div>
+        </div>
+    </div>
+</div>

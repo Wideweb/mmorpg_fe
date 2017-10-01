@@ -1,0 +1,36 @@
+<div class="container">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="page-header">
+				<h1>Rooms</h1>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<span class="error-message">{{ $ctrl.errorMessage }}</span>
+		</div>
+	</div>
+	<div class="row" ng-show="$ctrl.rooms.length > 0">
+		<div class="col-sm-12">
+			<div class="list-group">
+				<div class="row list-group-item">
+					<div class="col-sm-2">
+						<h4 class="list-group-item-heading">Name</h4>
+					</div>
+				</div>
+
+				<a class="row list-group-item list-group-item-action" ng-repeat="room in $ctrl.rooms">
+					<div class="col-sm-2">
+						<span class="list-group-item-text">{{ room.name }}</span>
+					</div>
+					<div class="col-sm-2 actions">
+						<button type="button" class="btn btn-default" ng-click="$ctrl.joinRoom(room)">
+                            <span class="glyphicon">join</span>
+                        </button>
+					</div>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
