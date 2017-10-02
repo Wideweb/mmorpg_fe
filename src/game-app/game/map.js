@@ -10,7 +10,8 @@ class Map {
 		return this._width;
 	}
 
-	constructor(cells) {
+	constructor(cells, camera) {
+		this._camera = camera;
 		this._cells = cells;
 		this._height = this._cells.length;
 		this._width = this._cells[0].length;
@@ -22,14 +23,21 @@ class Map {
 
 	draw(context) {
 		const tileWidth = constants.tileWidth;
-
+		
 		for (let y = 0; y < this._cells.length; y++) {
 			for (let x = 0; x < this._cells[y].length; x++) {
+
+				let positionX = x * tileWidth;
+				let positionY = y * tileWidth;
+
+				if (!this._camera.isVisible(positionX, positionY, tileWidth)) {
+					continue;
+				}
 
 				let cell = this._cells[y][x];
 
 				context.beginPath();
-				context.rect(x * tileWidth, y * tileWidth, tileWidth, tileWidth);
+				context.rect(positionX, positionY, tileWidth, tileWidth);
 				if (cell.type == 1) {
 					context.fillStyle = 'gray';
 				}

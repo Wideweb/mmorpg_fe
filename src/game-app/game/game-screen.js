@@ -35,8 +35,13 @@ class GameScreen {
 		}
 
 		let position = data.gameObject.position;
-		let target = this._map.getCell(position.x, position.y);
-		gameObject.path = [target];
+
+		if (data.immediately) {
+			gameObject.position = position;
+		} else {
+			let target = this._map.getCell(position.x, position.y);
+			gameObject.path = [target];
+		}
 	}
 
 	onUserData(data) {
@@ -86,7 +91,7 @@ class GameScreen {
 			return;
 		}
 
-		target.takeDamage(data.damage);
+		target.takeDamage(data.damage, data.targetHealth);
 		var fadeOutAnimation = new FadeOutAnimation(uuid(), data.damage, target.screenPositionCenter);
 		registry.add(fadeOutAnimation);
 	}

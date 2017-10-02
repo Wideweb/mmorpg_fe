@@ -9,6 +9,7 @@ let urls = {
 	rooms: gameApi + '/Room/Rooms',
 	getRoomMap: gameApi + '/Room/Map',
 	joinRoom: gameApi + '/Room/Join',
+	leaveRoom: gameApi + '/Room/Leave',
 	startGame: gameApi + '/Room/StartGame',
 };
 

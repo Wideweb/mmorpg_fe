@@ -16,7 +16,8 @@ class GameScreenController {
 
 	startGame() {
 		let authData = this.authService.getAuthData();
-		this.stopGame = startUp(authData.access_token, this.$state.params.roomName);
+		startUp(authData.access_token, this.$state.params.roomName)
+			.then(s => this.stopGame = s);
 	}
 
 	$onDestroy() {

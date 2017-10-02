@@ -30,6 +30,10 @@ class GameObject extends Observable {
 		this._isDisposed = false;
 	}
 
+	update() { }
+
+	draw() { }
+
 	dispose() {
 		if (!this._isDisposed) {
 			this._isDisposed = true;

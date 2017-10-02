@@ -31,6 +31,12 @@ class RoomService {
 			params: { roomName: roomName }
 		});
 	}
+	
+	leaveRoom(roomName) {
+		return this.$http.post(this.urls.leaveRoom, {}, {
+			params: { roomName: roomName }
+		});
+	}
 }
 
 export default RoomService;

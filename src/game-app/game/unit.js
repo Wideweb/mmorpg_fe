@@ -3,35 +3,56 @@ import GameObject from './game-object';
 
 class Unit extends GameObject {
 
-	constructor(sid, screenPosition, width, position) {
+	constructor(sid, name, screenPosition, width, position, health, maxHealth) {
 		super(sid, screenPosition, width);
 
+		this._name = name;
 		this._path = [];
 		this._position = position;
+		this._health = health;
+		this._maxHealth = maxHealth;
 
+		this._titleFontSize = 15;
 		this._speed = 1;
 		this._color = 'red';
 	}
 
 	update(elapsed) {
 		this.needMove() && this.run(elapsed);
+		super.update(elapsed);
 	}
 
-	draw(context, selected) {
+	draw(context) {
 		context.save();
 
 		context.beginPath();
 		context.rect(this._screenPosition.x, this._screenPosition.y, this._width, this._width);
 		context.fillStyle = this._color;
 		context.fill();
-
-		if (selected) {
-			context.strokeStyle = 'green';
-			context.lineWidth = 2;
-		}
 		context.stroke();
 
+		context.beginPath();
+		context.rect(this._screenPosition.x, this._screenPosition.y - 7, this._width, 4);
+		context.stroke();
+
+		context.beginPath();
+		let p = this._health / this._maxHealth;
+		context.rect(this._screenPosition.x, this._screenPosition.y - 6, this._width * p, 2);
+		context.fillStyle = 'red';
+		context.fill();
+		context.stroke();
+
+		if (this._name) {
+			context.font = `${this._titleFontSize}px Arial`;
+			context.fillStyle = 'red';
+			let titlePositionX = this.screenPositionCenter.x - context.measureText(this._name).width / 2;
+			let titlePositionY = this.screenPosition.y - 10;
+			context.fillText(this._name, titlePositionX, titlePositionY);
+		}
+
 		context.restore();
+
+		super.draw(context);
 	}
 
 	run(elapsed) {
@@ -54,10 +75,6 @@ class Unit extends GameObject {
 
 		} else {
 			this._path = this._path.slice(1);
-
-			/*if (this._path.length == 0) {
-				this.updatePath();
-			}*/
 		}
 
 		this._screenPosition.x += deltaX;
@@ -79,8 +96,10 @@ class Unit extends GameObject {
 			&& this._screenPosition.y + this._width >= screenPosition.y;
 	}
 
-	takeDamage(damage) {
+	takeDamage(damage, health) {
+		this._health = health;
 		console.log('took damage ', damage);
+		console.log('health ', health);
 	}
 
 	set path(value) {
@@ -95,10 +114,10 @@ class Unit extends GameObject {
 		this._position.x = value.x;
 		this._position.y = value.y;
 
-		this._screenPosition = {
-			x: this._position.x * this._width,
-			y: this._position.y * this._width,
-		};
+		this._screenPosition.x = this._position.x * this._width;
+		this._screenPosition.y = this._position.y * this._width;
+
+		this._path = [];
 	}
 
 	set color(value) {

@@ -8,8 +8,8 @@ class GameObjectFactory {
 
 		switch (gameObjectData.type) {
 			case gameObjectTypes.Unit:
-				gameObject = new Unit(gameObjectData.sid, gameObjectData.screenPosition,
-					gameObjectData.width, gameObjectData.position);
+				gameObject = new Unit(gameObjectData.sid, gameObjectData.name, gameObjectData.screenPosition,
+					gameObjectData.width, gameObjectData.position, gameObjectData.health, gameObjectData.maxHealth);
 				break;
 			case gameObjectTypes.Bullet:
 				gameObject = new Bullet(gameObjectData.sid, gameObjectData.screenPosition,

@@ -31,8 +31,8 @@ async function startUp(accessToken, room) {
 	let canvas = document.getElementById('map');
 	let context = canvas.getContext('2d');
 
-	let camera = new Camera();
-	let map = new Map(roomMap.cells);
+	let camera = new Camera(500, 500);
+	let map = new Map(roomMap.cells, camera);
 	let socket = new GameRoomSocket(urls.gameRoomSocket, authService.accessToken);
 	await socket.waitForConnection();
 	let screen = new GameScreen(room, camera, map, socket);

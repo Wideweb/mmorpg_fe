@@ -20,11 +20,17 @@
 					<div class="col-sm-2">
 						<h4 class="list-group-item-heading">Sid</h4>
 					</div>
+					<div class="col-sm-2">
+						<h4 class="list-group-item-heading">Name</h4>
+					</div>
 				</div>
 
-				<a class="row list-group-item list-group-item-action" ng-repeat="player in $ctrl.room.playes">
+				<a class="row list-group-item list-group-item-action" ng-repeat="player in $ctrl.room.players">
 					<div class="col-sm-2">
 						<span class="list-group-item-text">{{ player.sid }}</span>
+					</div>
+					<div class="col-sm-2">
+						<span class="list-group-item-text">{{ player.name }}</span>
 					</div>
 				</a>
 			</div>
@@ -34,6 +40,9 @@
 		<div class="col-sm-12">
 			<button type="button" class="btn btn-default" ng-disabled="$ctrl.submitting" ng-click="$ctrl.startGame()">
 				<span class="glyphicon">Start</span>
+			</button>
+			<button type="button" class="btn btn-default" ng-disabled="$ctrl.submitting" ng-click="$ctrl.leaveRoom()">
+				<span class="glyphicon">Leave</span>
 			</button>
 		</div>
 	</div>

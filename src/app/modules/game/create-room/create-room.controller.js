@@ -18,7 +18,8 @@ class CreateRoomController {
 
 		this.roomService
 			.createRoom(this.roomName, 1)
-			.then(() => this.$state.go('room-list'))
+			.then(() => this.roomService.joinRoom(this.roomName))
+			.then(() => this.$state.go('room', { roomName: this.roomName }))
 			.catch(e => this.errorMessage = e.data)
 			.finally(() => this.submitting = false);
 	}
