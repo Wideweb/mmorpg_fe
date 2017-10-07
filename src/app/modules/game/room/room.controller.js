@@ -1,8 +1,10 @@
 class RoomController {
 
-	constructor(roomService, $state) {
+	constructor(roomService, $state, $scope, webSocketEvents) {
 		this.roomService = roomService;
 		this.$state = $state;
+		this.$scope = $scope;
+		this.webSocketEvents = webSocketEvents;
 
 		this.room = {};
 		this.submitting = false;
@@ -12,6 +14,10 @@ class RoomController {
 
 		if (this.$state.params.roomName) {
 			this.fetchRoom();
+
+			this.$scope.$on(webSocketEvents.playerJoined, (e, data) => this.playerJoined(data.player));
+			this.$scope.$on(webSocketEvents.playerLeft, (e, data) => this.playerLeft(data.sid));
+			this.$scope.$on(webSocketEvents.gameStarted, () => this.onGameStarted());
 		}
 	}
 
@@ -34,12 +40,14 @@ class RoomController {
 
 		this.roomService
 			.startGame(this.room.name)
-			.then(() => {
-				this.gameStarted = true;
-				this.$state.go('game-screen', { roomName: this.room.name });
-			})
+			.then(() => this.onGameStarted())
 			.catch(e => this.errorMessage = e.data)
 			.finally(() => this.submitting = false);
+	}
+
+	onGameStarted() {
+		this.gameStarted = true;
+		this.$state.go('game-screen', { roomName: this.room.name });
 	}
 
 	leaveRoom() {
@@ -61,6 +69,17 @@ class RoomController {
 
 	hasPlayers() {
 		return this.room && this.room.players && this.room.players.length > 0;
+	}
+
+	playerJoined(player) {
+		let index = this.room.players.indexOf(p => p.sid == player.sid);
+		if (index < 0) {
+			this.room.players.push(player);
+		}
+	}
+
+	playerLeft(playerSid) {
+		this.room.players = this.room.players.filter(p => p.sid != playerSid);
 	}
 
 	$onDestroy() {

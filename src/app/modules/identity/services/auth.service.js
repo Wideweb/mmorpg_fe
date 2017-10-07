@@ -1,14 +1,17 @@
 const AUTH_DATA_STORAGE_KEY = 'game.identity.authData';
 
 class AuthService {
-	constructor(urls, $http, $rootScope, $cookies) {
+	constructor(urls, $http, $rootScope, $cookies, socketService) {
 		this.authData = {};
 		this.$http = $http;
 		this.urls = urls;
 		this.$rootScope = $rootScope;
 		this.$cookies = $cookies;
+		this.socketService = socketService;
 
-		this.getAuthData();
+		if (this.isAuthenticated()) {
+			this.socketService.connect(this.authData.access_token);
+		}
 	}
 
 	signUp(userName, password) {
@@ -47,7 +50,7 @@ class AuthService {
 	}
 
 	isAuthenticated() {
-		return !!this.getAuthData();
+		return !!this.getAuthData() && this.authData.access_token;
 	}
 
 	storeAuthData(authData) {
@@ -56,6 +59,7 @@ class AuthService {
 		this.setHttpAuthHeader();
 		var authDataJson = JSON.stringify(authData);
 		this.$cookies.put(AUTH_DATA_STORAGE_KEY, authDataJson);
+		this.socketService.connect(this.authData.access_token);
 	}
 
 	getAuthData() {

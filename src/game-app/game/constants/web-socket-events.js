@@ -1,10 +1,10 @@
 
 const webSocketEvents = {
-	userConnected: 'USER_CONNECTED',
-    userData: 'USER_DATA',
-    userDisconnected: 'USER_DISCONNECTED',
+	playerConnected: 'PLAYER_CONNECTED',
+    playerData: 'PLAYER_DATA',
+    disconnected: 'DISCONNECTED',
     gameObjectState: 'GAME_OBJECT_STATE',
-	joinRoom: 'JOIN_ROOM',
+	joinRoom: 'JOIN_GROUP',
 	setTarget: 'SET_TARGET',
 	UseAbility: 'USE_ABILITY',
 	DealDamage: 'DEAL_DAMAGE'

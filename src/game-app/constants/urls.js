@@ -5,8 +5,6 @@ const urls = {
 	login: `${identityApi}/token`,
 	room: `${gameApi}/Room`,
 	getRoomMap: `${gameApi}/Room/Map`,
-	joinRoom: `${gameApi}/Room/Join`,
-	startGame: `${gameApi}/Room/StartGame`,
 	gameRoomSocket: 'ws://localhost:55603/gr'
 };
 

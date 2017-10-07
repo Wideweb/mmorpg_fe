@@ -1,14 +1,19 @@
 class RoomListController {
 
-	constructor(roomService, $state) {
+	constructor(roomService, $state, webSocketEvents, $scope) {
 		this.roomService = roomService;
 		this.$state = $state;
+		this.webSocketEvents = webSocketEvents;
+		this.$scope = $scope;
 
 		this.rooms = [];
 		this.submitting = false;
 		this.errorMessage = null;
 
 		this.fetchAllRooms();
+
+		this.$scope.$on(webSocketEvents.roomAdded, (e, data) => this.roomAdded(data.room));
+		this.$scope.$on(webSocketEvents.roomRemoved, (e, data) => this.roomRemoved(data.roomName));
 	}
 
 	joinRoom(room) {
@@ -28,6 +33,14 @@ class RoomListController {
 				this.rooms = response.data;
 			})
 			.catch(e => this.errorMessage = e.data);
+	}
+
+	roomAdded(room) {
+		this.rooms.push(room);
+	}
+
+	roomRemoved(roomName) {
+		this.rooms = this.rooms.filter(r => r.name != roomName);
 	}
 }
 

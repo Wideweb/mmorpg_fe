@@ -8,7 +8,7 @@ class GameRoomSocket extends WebSocket {
 	}
 
 	joinRoom(room) {
-		this.send(webSocketEvents.joinRoom, { room: room });
+		this.send(webSocketEvents.joinRoom, { group: room });
 	}
 
 	sendSetTarget(data) {
@@ -31,16 +31,16 @@ class GameRoomSocket extends WebSocket {
 		this.subscribe(webSocketEvents.DealDamage, callback);
 	}
 
-	onUserConnected(callback) {
-		this.subscribe(webSocketEvents.userConnected, callback);
+	onPlayerConnected(callback) {
+		this.subscribe(webSocketEvents.playerConnected, callback);
 	}
 
-	onUserDisconnected(callback) {
-		this.subscribe(webSocketEvents.userDisconnected, callback);
+	onPlayerDisconnected(callback) {
+		this.subscribe(webSocketEvents.disconnected, callback);
 	}
 
-	onUserData(callback) {
-		this.subscribe(webSocketEvents.userData, callback);
+	onPlayerData(callback) {
+		this.subscribe(webSocketEvents.playerData, callback);
 	}
 }
 

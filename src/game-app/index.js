@@ -24,8 +24,6 @@ async function startUp(accessToken, room) {
 	authService.accessToken = accessToken;
 
 	let roomService = container.resolve('roomService');
-	await roomService.createRoom(room, 1);
-	await roomService.joinRoom(room);
 	let roomMap = await roomService.getRoomMap(room);
 
 	let canvas = document.getElementById('map');

@@ -14,9 +14,9 @@ class GameScreen {
 		this._gameRoomSocket = gameRoomSocket;
 
 		this._gameRoomSocket.joinRoom(room);
-		this._gameRoomSocket.onUserData(data => this.onUserData(data));
-		this._gameRoomSocket.onUserConnected(data => this.onUserConnected(data));
-		this._gameRoomSocket.onUserDisconnected(data => this.onUserDisconnected(data));
+		this._gameRoomSocket.onPlayerData(data => this.onPlayerData(data));
+		this._gameRoomSocket.onPlayerConnected(data => this.onPlayerConnected(data));
+		this._gameRoomSocket.onPlayerDisconnected(data => this.onPlayerDisconnected(data));
 		this._gameRoomSocket.onUnitUsedAbility((data) => this.onUnitUsedAbility(data));
 		this._gameRoomSocket.onGameObjectStateUpdated((data) => this.onGameObjectStateUpdated(data));
 		this._gameRoomSocket.onDamageDealt((data) => this.onDamageDealt(data));
@@ -44,7 +44,7 @@ class GameScreen {
 		}
 	}
 
-	onUserData(data) {
+	onPlayerData(data) {
 		for (let gameObjectData of data.gameObjects) {
 			registry.add(factory.create(gameObjectData));
 		}
@@ -60,7 +60,7 @@ class GameScreen {
 		);
 	}
 
-	onUserConnected(data) {
+	onPlayerConnected(data) {
 		let player = data.player;
 
 		if (this._player && player.sid != this._player.id) {
@@ -69,7 +69,7 @@ class GameScreen {
 		}
 	}
 
-	onUserDisconnected(data) {
+	onPlayerDisconnected(data) {
 		registry.remove(data.sid);
 	}
 
