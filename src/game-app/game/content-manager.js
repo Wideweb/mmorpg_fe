@@ -1,5 +1,6 @@
 import terrainsSpriteFile from '../../assets/images/terrains.png';
-import humanSpriteFile from '../../assets/images/human.png';
+import warriorSpriteFile from '../../assets/images/warrior.png';
+import archerSpriteFile from '../../assets/images/archer.png';
 
 class ContentManager {
 
@@ -7,7 +8,8 @@ class ContentManager {
 		this._entries = [];
 
 		this.add('terrains', terrainsSpriteFile);
-		this.add('human', humanSpriteFile);
+		this.add('warrior', warriorSpriteFile);
+		this.add('archer', archerSpriteFile);
 	}
 
 	add(name, path) {

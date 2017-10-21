@@ -5,7 +5,7 @@ import container from '../infrastructure/ioc.container';
 
 class Unit extends GameObject {
 
-	constructor(sid, name, screenPosition, width, position, health, maxHealth) {
+	constructor(sid, name, screenPosition, width, position, health, maxHealth, spriteFileName) {
 		super(sid, screenPosition, width);
 
 		this._name = name;
@@ -20,7 +20,7 @@ class Unit extends GameObject {
 		this._moveVector = { x: 0, y: 0 };
 
 		let contentManager = container.resolve('contentManager');
-		let image = contentManager.getImage('human');
+		let image = contentManager.getImage(spriteFileName);
 		this._sprite = new UnitAnimation(this, image);
 	}
 
