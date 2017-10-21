@@ -20,6 +20,7 @@ class SocketService {
 		this.socket.subscribe(this.webSocketEvents.playerJoined, (data) => this.handleEvent(this.webSocketEvents.playerJoined, data));
 		this.socket.subscribe(this.webSocketEvents.playerLeft, (data) => this.handleEvent(this.webSocketEvents.playerLeft, data));
 		this.socket.subscribe(this.webSocketEvents.gameStarted, (data) => this.handleEvent(this.webSocketEvents.gameStarted, data));
+		this.socket.subscribe(this.webSocketEvents.characterChosen, (data) => this.handleEvent(this.webSocketEvents.characterChosen, data));
 
 		return this.socket
 			.waitForConnection()

@@ -18,6 +18,7 @@ class RoomController {
 			this.$scope.$on(webSocketEvents.playerJoined, (e, data) => this.playerJoined(data.player));
 			this.$scope.$on(webSocketEvents.playerLeft, (e, data) => this.playerLeft(data.sid));
 			this.$scope.$on(webSocketEvents.gameStarted, () => this.onGameStarted());
+			this.$scope.$on(webSocketEvents.characterChosen, (e, data) => this.onCharacterChosen(data));
 		}
 	}
 
@@ -36,6 +37,10 @@ class RoomController {
 	}
 
 	startGame() {
+		if (!this.canStartGame()) {
+			return;
+		}
+
 		this.submitting = true;
 
 		this.roomService
@@ -80,6 +85,23 @@ class RoomController {
 
 	playerLeft(playerSid) {
 		this.room.players = this.room.players.filter(p => p.sid != playerSid);
+	}
+
+	onCharacterChosen(data) {
+		let player = this.room.players.find(p => p.sid == data.playerSid);
+		if (!player) {
+			return;
+		}
+
+		player.characterId = data.characterId;
+		player.characterName = data.characterName;
+	}
+
+	canStartGame() {
+		return !this.submitting 
+			&& this.room 
+			&& this.room.players 
+			&& this.room.players.every(p => p.characterId != null);
 	}
 
 	$onDestroy() {

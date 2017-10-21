@@ -7,7 +7,8 @@ const webSocketEvents = {
 	roomRemoved: 'ROME_REMOVED',
 	playerJoined: 'PLAYER_JOINED',
 	playerLeft: 'PLAYER_LEFT',
-	gameStarted: 'GAME_STARTED'
+	gameStarted: 'GAME_STARTED',
+	characterChosen: 'CHARACTER_CHOSEN'
 };
 
 export default webSocketEvents;

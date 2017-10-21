@@ -9,7 +9,10 @@ let urls = {
 	joinRoom: identityApi + '/Room/Join',
 	leaveRoom: identityApi + '/Room/Leave',
 	startGame: identityApi + '/Room/StartGame',
-	identitySocket: 'ws://localhost:54404/id'
+	identitySocket: 'ws://localhost:54404/id',
+
+	character: identityApi + '/Character',
+	chooseCharacter: identityApi + '/Character/Choose'
 };
 
 export default urls;

@@ -5,8 +5,10 @@ import gameScreenComponent from './game-screen/game-screen.component';
 import roomListComponent from './room-list/room-list.component';
 import roomComponent from './room/room.component';
 import createRoomComponent from './create-room/create-room.component';
+import characterListComponent from './character-list/character-list.component';
 
 import roomService from './services/room.service';
+import characterService from './services/character.service';
 
 const ngModule = angular
 	.module('game', [
@@ -17,8 +19,10 @@ const ngModule = angular
 	.component('roomList', roomListComponent)
 	.component('room', roomComponent)
 	.component('createRoom', createRoomComponent)
+	.component('characterList', characterListComponent)
 
 	.service('roomService', roomService)
+	.service('characterService', characterService)
 
 	.config(($stateProvider) => {
 		$stateProvider
@@ -37,6 +41,10 @@ const ngModule = angular
 			.state('create-room', {
 				url: '/create-room',
 				template: '<create-room></create-room>',
+			})
+			.state('character-list', {
+				url: '/character-list',
+				template: '<character-list></character-list>',
 			});
 	});
 
