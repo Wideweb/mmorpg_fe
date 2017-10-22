@@ -9,8 +9,12 @@ class SpriteAnimation {
 		this._startSpriteGridPoint = value;
 	}
 
+	set animationTime(value) {
+		this._frameTime = value / this._framesNumber;
+	}
+
 	constructor(image, framesNumber, frameTime, startSpriteGridPoint, spriteGridWidth,
-		spriteGridHeight, spriteTileWidth, spriteTileHeight, scale) {
+		spriteGridHeight, spriteTileWidth, spriteTileHeight, scale, cycled) {
 		this._image = image;
 		this._framesNumber = framesNumber;
 		this._frameTime = frameTime;
@@ -28,6 +32,7 @@ class SpriteAnimation {
 		this._startClippingX = 0;
 
 		this._stop = false;
+		this._cycled = cycled;
 	}
 
 	update(elapsed) {
@@ -47,6 +52,7 @@ class SpriteAnimation {
 
 		if (this._currentFrame >= this._framesNumber) {
 			this.reset();
+			this._stop = !this._cycled;
 		}
 	}
 

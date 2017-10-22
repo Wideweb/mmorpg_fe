@@ -22,6 +22,10 @@ class GameRoomSocket extends WebSocket {
 	onGameObjectStateUpdated(callback) {
 		this.subscribe(webSocketEvents.gameObjectState, callback);
 	}
+
+	onUnitCastAbility(callback) {
+		this.subscribe(webSocketEvents.CastAbility, callback);
+	}
 	
 	onUnitUsedAbility(callback) {
 		this.subscribe(webSocketEvents.UseAbility, callback);

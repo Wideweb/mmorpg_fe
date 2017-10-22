@@ -17,6 +17,7 @@ class GameScreen {
 		this._gameRoomSocket.onPlayerData(data => this.onPlayerData(data));
 		this._gameRoomSocket.onPlayerConnected(data => this.onPlayerConnected(data));
 		this._gameRoomSocket.onPlayerDisconnected(data => this.onPlayerDisconnected(data));
+		this._gameRoomSocket.onUnitCastAbility((data) => this.onUnitCastAbility(data));
 		this._gameRoomSocket.onUnitUsedAbility((data) => this.onUnitUsedAbility(data));
 		this._gameRoomSocket.onGameObjectStateUpdated((data) => this.onGameObjectStateUpdated(data));
 		this._gameRoomSocket.onDamageDealt((data) => this.onDamageDealt(data));
@@ -71,6 +72,11 @@ class GameScreen {
 
 	onPlayerDisconnected(data) {
 		registry.remove(data.sid);
+	}
+
+	onUnitCastAbility(data) {
+		let unit = registry.getById(data.sid);
+		unit && unit.castAbility(data.castTime);
 	}
 
 	onUnitUsedAbility(data) {

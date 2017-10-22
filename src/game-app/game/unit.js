@@ -22,6 +22,7 @@ class Unit extends GameObject {
 		let contentManager = container.resolve('contentManager');
 		let image = contentManager.getImage(spriteFileName);
 		this._sprite = new UnitAnimation(this, image);
+		this._castingAbility = false;
 	}
 
 	update(elapsed) {
@@ -63,6 +64,7 @@ class Unit extends GameObject {
 	}
 
 	run(elapsed) {
+		this.cancelCastAbility();
 		let next = this._path[0];
 
 		this._position.x = next.x;
@@ -106,6 +108,15 @@ class Unit extends GameObject {
 			&& this._screenPosition.x + this._width >= screenPosition.x
 			&& this._screenPosition.y <= screenPosition.y
 			&& this._screenPosition.y + this._width >= screenPosition.y;
+	}
+
+	castAbility(castTime) {
+		this._sprite.startCastRageAbilityAnimation(castTime);
+		this._castingAbility = true;
+	}
+
+	cancelCastAbility() {
+		this._castingAbility = false;
 	}
 
 	takeDamage(damage, health) {
